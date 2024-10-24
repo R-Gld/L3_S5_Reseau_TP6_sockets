@@ -6,7 +6,6 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <limits.h>
 
 #define LISTENING_ADDRESS "0.0.0.0"
 

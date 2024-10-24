@@ -9,6 +9,10 @@
 #include <string.h>
 #include <unistd.h>
 
+#define handle_error(vl, msg) \
+    if(vl == -1) { perror(msg); return EXIT_FAILURE; }
+#define handle_error_socket(vl, msg, server_sock_fd) \
+    if(vl == -1) { perror(msg); if (close(server_sock_fd) == -1) perror("close socket"); return EXIT_FAILURE; }
 
 /**
  * Params: <pre><code>argv[0] \<address> \<port> [raw]</code></pre>
@@ -38,14 +42,10 @@ int main(int argc, char **argv) {
 
 
     int socket_fd = socket(sa.sin_family, SOCK_STREAM, 0);
-    if(socket_fd == -1) { perror("socket"); return EXIT_FAILURE; }
+    handle_error(socket_fd, "socket");
 
     err = connect(socket_fd, (struct sockaddr*) &sa, sizeof(struct sockaddr));
-    if(err == -1) {
-        perror("connect");
-        if(close(socket_fd) == -1) perror("close socket");
-        return EXIT_FAILURE;
-    }
+    handle_error_socket(err, "connect", socket_fd)
 
     char buffer[BUFSIZ]; // Match the size from the BUFFER to the server.c
     ssize_t byte_read = 1;

@@ -11,7 +11,7 @@
 
 
 /**
- * Params: argv[0] <address> <port>
+ * Params: <pre><code>argv[0] \<address> \<port> [raw]</code></pre>
  */
 int main(int argc, char **argv) {
     if(argc < 3 || argc > 4) {
@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     bzero(sa.sin_zero, 8);
 
     int err = inet_aton(address_str, &sa.sin_addr);
-    if(err == 0) { fprintf(stderr, "Error while trying to parse the address '%s'\n", address_str); return EXIT_FAILURE; }
+    if(err == 0) { fprintf(stderr, "An error occurred while parsing the IP '%s'.\n", address_str); return EXIT_FAILURE; }
 
 
     int socket_fd = socket(sa.sin_family, SOCK_STREAM, 0);
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    char buffer[BUFSIZ];
+    char buffer[BUFSIZ]; // Match the size from the BUFFER to the server.c
     ssize_t byte_read = 1;
     while(byte_read >= 0) {
         byte_read = recv(socket_fd, buffer, BUFSIZ, 0);

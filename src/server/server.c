@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     err = bind(server_sock_fd, (struct sockaddr *) &sa, sizeof(struct sockaddr));
     if(err == -1) { perror("bind"); if (close(server_sock_fd) == -1) perror("close socket"); return EXIT_FAILURE; }
 
-    err = listen(server_sock_fd, SOMAXCONN); // Here, `SOMAXCONN` as backlog to use the `/proc/sys/net/core/somaxconn` value. The system defined value. By default on my system: 4096
+    err = listen(server_sock_fd, SOMAXCONN); // Here, `SOMAXCONN` as backlog to use `/proc/sys/net/core/somaxconn` (The system defined backlog value) By default on my system: 4096
     if(err == -1) { perror("listen"); if (close(server_sock_fd) == -1) perror("close socket"); return EXIT_FAILURE; }
 
     socklen_t peer_addr_size = sizeof(peer_addr);

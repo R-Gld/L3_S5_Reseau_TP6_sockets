@@ -66,9 +66,3 @@ int main(int argc, char **argv) {
 
     return EXIT_SUCCESS;
 }
-
-/**
- * v         v       v
- * socket -> bind -> listen -> accept -> send/recv -> shutdown / close;
- *
-*/

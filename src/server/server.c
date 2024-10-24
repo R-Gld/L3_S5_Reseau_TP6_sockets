@@ -44,7 +44,6 @@ int main(int argc, char **argv) {
     int client_socket_fd = accept(server_sock_fd, (struct sockaddr *) &peer_addr, &peer_addr_size);
     if(client_socket_fd == -1) { perror("accept"); if(close(server_sock_fd) == -1) perror("close socket"); return EXIT_FAILURE; }
 
-    // Client connected, waiting for data.
     const char *message = "Const message sent from the server.";
     ssize_t byte_sent = send(client_socket_fd, message, strlen(message), 0);
     if(byte_sent == -1) {

@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    int port = atoi(argv[1]);
+    int port = atoi(argv[1]); // Can be converted to strtol to better implem (using errno etc) but is ok bc return 0 on error and 0 is not an accepted value.
     if(port < 1 || port > 65535) { fprintf(stderr, "Port should be an int between 1 and 65535.\n"); return EXIT_FAILURE; }
 
     struct sockaddr_in sa;

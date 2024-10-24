@@ -14,14 +14,19 @@
  * Params: argv[0] <address> <port>
  */
 int main(int argc, char **argv) {
-    if(argc != 3) {
-        fprintf(stderr, "Usage: %s <address_str> <port>\n", argv[0]);
+    if(argc < 3 || argc > 4) {
+        fprintf(stderr, "Usage: %s <address_str> <port> [raw]\n", argv[0]);
         return EXIT_FAILURE;
     }
 
     char* address_str = argv[1];
     int port = atoi(argv[2]);
     if(port < 1 || port > 65535) { fprintf(stderr, "The port should be an int between 1 and 65535.\n"); return EXIT_FAILURE; }
+
+    int raw = 0;
+    if(argc == 4 && strcmp(argv[3], "true") == 0) {
+        raw = 1;
+    }
 
     struct sockaddr_in sa;
     sa.sin_port = htons(port);
@@ -47,7 +52,7 @@ int main(int argc, char **argv) {
     while(byte_read >= 0) {
         byte_read = recv(socket_fd, buffer, BUFSIZ, 0);
         if(byte_read == 0) {
-            printf("Closing connection.\n");
+            if(!raw) printf("Closing connection.\n");
             if(shutdown(socket_fd, SHUT_RDWR) == -1) { perror("shutdown"); return EXIT_FAILURE; }
             if(close(socket_fd) == -1) perror("close socket");
             break;
@@ -58,7 +63,11 @@ int main(int argc, char **argv) {
             return EXIT_FAILURE;
         } else {
             buffer[byte_read] = '\0';
-            printf("Message reçu:\n```\n%s\n```\n", buffer);
+            if(raw) {
+                printf("%s", buffer);
+            } else {
+                printf("Message reçu:\n```\n%s\n```\n", buffer);
+            }
         }
     }
 

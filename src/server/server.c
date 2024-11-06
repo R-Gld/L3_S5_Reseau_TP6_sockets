@@ -48,6 +48,10 @@ int main(int argc, char **argv) {
 
     struct sockaddr_in peer_addr;
 
+    int enable = 1;
+    err = setsockopt(server_sock_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
+    handle_error_socket(err, "setsockopt", server_sock_fd);
+
     err = bind(server_sock_fd, (struct sockaddr *) &sa, sizeof(struct sockaddr));
     handle_error_socket(err, "bind", server_sock_fd);
 

@@ -14,7 +14,7 @@
     if(vl == -1) { perror(msg); if (close(server_sock_fd) == -1) perror("close socket"); return EXIT_FAILURE; }
 
 #define LISTENING_ADDRESS "0.0.0.0" // The listening ip address (Example: 127.0.0.1 for lo / 0.0.0.0 for all)
-#define MESSAGE_SENT "Const message sent from the server. :)\n"  // Message sent to the client
+#define MAX_SIZE_NAME 512
 
 
 void close_sockets(int client_fd, int server_fd);
@@ -62,18 +62,43 @@ int main(int argc, char **argv) {
     int client_socket_fd = accept(server_sock_fd, (struct sockaddr *) &peer_addr, &peer_addr_size);
     handle_error_socket(client_socket_fd, "accept", server_sock_fd);
 
-    const char *message = MESSAGE_SENT;
+    char message[MAX_SIZE_NAME];
+
+    ssize_t byte_read = read(client_socket_fd, message, MAX_SIZE_NAME);
+    if(byte_read == -1) {
+        perror("read");
+        close_sockets(client_socket_fd, server_sock_fd);
+        return EXIT_FAILURE;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    char message[MAX_SIZE_NAME] = "Bonjour";
+
+
+//    const char *message = MESSAGE_SENT;
 
     /**
      * Send the message to the client
      * Return the number of byte sent on success and -1 on error (errno set)
      */
-    ssize_t byte_sent = send(client_socket_fd, message, strlen(message), 0);
+    /*ssize_t byte_sent = send(client_socket_fd, message, strlen(message), 0);
     if(byte_sent == -1) {
         perror("send");
         close_sockets(client_socket_fd, server_sock_fd);
         return EXIT_FAILURE;
-    }
+    }*/
 
     close_sockets(client_socket_fd, server_sock_fd);
     return EXIT_SUCCESS;
